@@ -126,7 +126,7 @@ Reiniciar backend:
 docker compose restart backend
 ```
 
-Uso del sistema:
+## Uso del sistema:
 
 - Iniciar sesion con un usuario de prueba:
   - `admin@email.com`
