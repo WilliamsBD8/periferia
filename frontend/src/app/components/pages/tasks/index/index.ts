@@ -147,6 +147,9 @@ export class Index {
           this.initKanban();
           this.form.reset();
           this.form.get('assignedToUserId')?.setValue(String(this.user?.id) || null);
+          this.form.get('expirationDate')?.setValue(null);
+          this.form.get('description')?.setValue('');
+          this.form.get('title')?.setValue('');
           this.form.get('status')?.setValue('PENDING');
           this.mode = 'create';
           this.editingId = null;
@@ -168,6 +171,9 @@ export class Index {
           this.form.reset();
           this.mode = 'create';
           this.form.get('assignedToUserId')?.setValue(String(this.user?.id) || null);
+          this.form.get('expirationDate')?.setValue(null);
+          this.form.get('description')?.setValue('');
+          this.form.get('title')?.setValue('');
           this.form.get('status')?.setValue('PENDING');
           this.editingId = null;
           this.initKanban();
