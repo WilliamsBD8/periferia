@@ -126,6 +126,42 @@ Reiniciar backend:
 docker compose restart backend
 ```
 
+Uso del sistema:
+
+- Iniciar sesion con un usuario de prueba:
+  - `admin@email.com`
+  - `administrator@email.com`
+  - `wsbonilladiaz@gmail.com`
+- Crear una tarea:
+   - Titulo
+   - Descripcion
+   - Fecha de expiracion
+   - Asignar a
+   - Estado
+- Dar clic en la tarea para ver los detalles:
+   - Informacion de la tarea
+   - Boton de editar
+   - Boton de eliminar
+- Editar una tarea:
+   - Titulo
+   - Descripcion
+   - Fecha de expiracion
+   - Asignar a
+   - Estado
+- Arrastrar y soltar una tarea para cambiar su estado:
+   - Pendiente
+   - En progreso
+   - Completado
+   - Cancelado
+- Eliminar una tarea:
+   - Dar clic en el boton de eliminar
+   - Confirmar la eliminacion
+- Ver notificaciones:
+   - Dar clic en el boton de notificaciones
+   - Ver las notificaciones
+- Ver dashboard:
+   - Dar clic en el boton de dashboard
+   - Ver el dashboard
 ## Ejecucion local (opcional)
 
 Si necesitas ejecutar sin Docker, configura PostgreSQL local, instala dependencias en `backend/` y `frontend/`, y ejecuta Prisma manualmente.
