@@ -165,9 +165,51 @@ docker compose restart backend
    - Ver el dashboard
 ## Ejecucion local (opcional)
 
-Si necesitas ejecutar sin Docker, configura PostgreSQL local, instala dependencias en `backend/` y `frontend/`, y ejecuta Prisma manualmente.
+Si necesitas ejecutar sin Docker, usa PostgreSQL local y corre backend/frontend en dos terminales.
 
-> Para ejecucion local usa `DB_HOST=localhost`.
+### 1) Configurar variables para local
+
+Asegura en tu `.env`:
+
+```env
+DB_HOST=localhost
+DB_PORT=5432
+DB_USER=postgres
+DB_PASSWORD=postgres
+DB_NAME=periferia
+DATABASE_URL=postgresql://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB_NAME}
+BACKEND_PORT=3000
+FRONTEND_PORT=4200
+JWT_SECRET=tu_jwt_secreto
+API_RESEND_KEY=tu_api_resend_key
+```
+
+### 2) Backend (terminal 1)
+
+```bash
+cd backend
+npm install
+npx prisma generate
+npx prisma migrate dev
+npx prisma db seed
+npm start
+```
+
+### 3) Frontend (terminal 2)
+
+```bash
+cd frontend
+npm install
+npm start
+```
+
+### 4) Accesos en local
+
+- Frontend: `http://localhost:4200`
+- Backend: `http://localhost:3000`
+- API base: `http://localhost:3000/api/v1`
+
+
 
 ## Solucion de problemas comunes
 
