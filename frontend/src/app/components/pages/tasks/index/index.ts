@@ -146,8 +146,8 @@ export class Index {
           this.tasks.unshift(res.data);
           this.initKanban();
           this.form.reset();
-          this.form.get('assignedToUserId')?.setValue(String(this.user?.id) || null);
-          this.form.get('expirationDate')?.setValue(null);
+          this.form.get('assignedToUserId')?.setValue(String(this.user?.id) || "");
+          this.form.get('expirationDate')?.setValue("");
           this.form.get('description')?.setValue('');
           this.form.get('title')?.setValue('');
           this.form.get('status')?.setValue('PENDING');
@@ -170,8 +170,8 @@ export class Index {
           this.tasks = this.tasks.map(t => String(t.id) === String(this.editingId) ? res.data : t);
           this.form.reset();
           this.mode = 'create';
-          this.form.get('assignedToUserId')?.setValue(String(this.user?.id) || null);
-          this.form.get('expirationDate')?.setValue(null);
+          this.form.get('assignedToUserId')?.setValue(String(this.user?.id) || "");
+          this.form.get('expirationDate')?.setValue("");
           this.form.get('description')?.setValue('');
           this.form.get('title')?.setValue('');
           this.form.get('status')?.setValue('PENDING');
