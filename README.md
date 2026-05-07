@@ -127,8 +127,9 @@ docker compose restart backend
 ```
 
 ## Uso del sistema:
-
-- Iniciar sesion con un usuario de prueba:
+- Ir a la pagina de login:
+  - `http://localhost:4200/login`
+- Iniciar sesion con un usuario de prueba (password: `123456`):
   - `admin@email.com`
   - `administrator@email.com`
   - `wsbonilladiaz@gmail.com`
