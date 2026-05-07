@@ -1,0 +1,126 @@
+generator client {
+    provider = "prisma-client-js"
+}
+
+datasource db {
+    provider    = "postgresql"
+}
+
+model Roles {
+    id Int @id @default(autoincrement())
+    name String
+    createdAt DateTime @default(now()) @map("created_at")
+    updatedAt DateTime @updatedAt @map("updated_at")
+    deletedAt DateTime? @map("deleted_at")
+    users User[]
+    rolePermissions RolePermissions[]
+    @@map("roles")
+    @@unique([name, deletedAt])
+}
+
+enum StatusUser {
+    ACTIVE
+    INACTIVE
+}
+
+enum TypePermission {
+    CREATE
+    READ
+    UPDATE
+    DELETE
+}
+
+model User {
+    id Int @id @default(autoincrement())
+    name String
+    email String
+    password String
+    roleId Int
+    role Roles @relation(fields: [roleId], references: [id])
+    status StatusUser @default(ACTIVE)
+    createdAt DateTime @default(now()) @map("created_at")
+    updatedAt DateTime @updatedAt @map("updated_at")
+    deletedAt DateTime? @map("deleted_at")
+    tokens TokensUser[]
+    tasks Tasks[] @relation("TaskOwner")
+    assignedTasks Tasks[] @relation("TaskAssignee")
+    @@map("users")
+    @@unique([email, deletedAt])
+}
+
+model TokensUser {
+    id Int @id @default(autoincrement())
+    userId Int @map("user_id")
+    user User @relation(fields: [userId], references: [id])
+    token String @unique
+    expiresAt DateTime
+    createdAt DateTime @default(now()) @map("created_at")
+    updatedAt DateTime @updatedAt @map("updated_at")
+    deletedAt DateTime? @map("deleted_at")
+    @@map("tokens_users")
+    @@unique([token, deletedAt])
+}
+
+model Permissions {
+    id Int @id @default(autoincrement())
+    name String
+    type TypePermission
+    description String?
+    createdAt DateTime @default(now()) @map("created_at")
+    updatedAt DateTime @updatedAt @map("updated_at")
+    deletedAt DateTime? @map("deleted_at")
+    rolePermissions RolePermissions[]
+    @@map("permissions")
+    @@unique([name, type, deletedAt])
+}
+
+model RolePermissions {
+    id Int @id @default(autoincrement())
+    roleId Int @map("role_id")
+    role Roles @relation(fields: [roleId], references: [id])
+    permissionId Int @map("permission_id")
+    permission Permissions @relation(fields: [permissionId], references: [id])
+    @@map("role_permissions")
+    @@unique([roleId, permissionId])
+}
+
+enum StatusTask {
+    PENDING
+    IN_PROGRESS
+    COMPLETED
+    CANCELLED
+}
+
+model Tasks {
+    id Int @id @default(autoincrement())
+    title String
+    description String?
+    expirationDate DateTime?
+    order Int?
+
+    userId Int @map("user_id")
+    user User @relation("TaskOwner", fields: [userId], references: [id])
+
+    assignedToUserId Int? @map("assigned_to_user_id")
+    assignedToUser User? @relation("TaskAssignee", fields: [assignedToUserId], references: [id])
+
+    status StatusTask @default(PENDING)
+    notifications Notifications[]
+    createdAt DateTime @default(now()) @map("created_at")
+    updatedAt DateTime @updatedAt @map("updated_at")
+    deletedAt DateTime? @map("deleted_at")
+    @@map("tasks")
+}
+
+model Notifications {
+    id Int @id @default(autoincrement())
+    taskId Int @map("task_id")
+    task Tasks @relation(fields: [taskId], references: [id])
+    title String
+    message String
+    isRead Boolean @default(false)
+    createdAt DateTime @default(now()) @map("created_at")
+    updatedAt DateTime @updatedAt @map("updated_at")
+    deletedAt DateTime? @map("deleted_at")
+    @@map("notifications")
+}

@@ -1,0 +1,120 @@
+<section class="container-fluid py-4 dashboard">
+
+  @if (loading) {
+    <div class="card p-4 text-center">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Cargando...</span>
+      </div>
+      <p class="text-muted mt-3 mb-0">Cargando indicadores...</p>
+    </div>
+  } @else if (errorMessage) {
+    <div class="alert alert-danger mb-0" role="alert">
+      {{ errorMessage }}
+    </div>
+  } @else {
+    <div class="row g-4 mb-4">
+      <div class="col-sm-6 col-xl-4">
+        <div class="card indicator-card h-100">
+          <div class="card-body">
+            <small class="text-muted">Total de tareas</small>
+            <h3 class="mb-0">{{ taskSummary.total }}</h3>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-sm-6 col-xl-4">
+        <div class="card border-success box-shadow-success indicator-card h-100">
+          <div class="card-body">
+            <small class="text-muted">Completadas</small>
+            <h3 class="mb-0 text-success">{{ taskSummary.completed }}</h3>
+            <small class="text-muted">{{ taskSummary.completionRate }}% de avance</small>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-sm-6 col-xl-4">
+        <div class="card border-danger box-shadow-danger indicator-card h-100">
+          <div class="card-body">
+            <small class="text-muted">Vencidas</small>
+            <h3 class="mb-0 text-danger">{{ taskSummary.overdue }}</h3>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="row g-4">
+      <div class="col-xl-5">
+        <div class="card h-100">
+          <div class="card-header pb-0">
+            <h5 class="mb-0">Distribución por estado</h5>
+          </div>
+          <div class="card-body">
+            <div class="donut-wrapper">
+              <div class="donut-chart" [ngStyle]="getDonutChartStyle()"></div>
+              <div class="donut-center">
+                <strong>{{ taskSummary.total }}</strong>
+                <small>Total</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-xl-7">
+        <div class="card h-100">
+          <div class="card-header pb-0">
+            <h5 class="mb-0">Progreso por estado</h5>
+          </div>
+          <div class="card-body">
+            @for (item of statusDistribution; track item.key) {
+              <div class="mb-3">
+                <div class="d-flex justify-content-between mb-1">
+                  <span>{{ item.label }} ({{ item.count }})</span>
+                  <strong>{{ item.percent }}%</strong>
+                </div>
+                <div class="progress bg-label-{{ item.classColor }}">
+                  <div class="progress-bar bg-{{ item.classColor }}" role="progressbar" [style.width.%]="item.percent" aria-valuenow="{{ item.percent }}" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12">
+        <div class="card">
+          <div class="card-header pb-0">
+            <h5 class="mb-0">Próximas tareas a vencer</h5>
+          </div>
+          <div class="card-body">
+            @if (upcomingTasks.length === 0) {
+              <p class="text-muted mb-0">No hay tareas próximas a vencer.</p>
+            } @else {
+              <div class="table-responsive">
+                <table class="table table-striped align-middle mb-0">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Título</th>
+                      <th>Fecha de vencimiento</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @for (task of upcomingTasks; track task.id) {
+                      <tr>
+                        <td>#{{ task.id }}</td>
+                        <td>{{ task.title }}</td>
+                        <td>{{ task.expirationDate | date: 'dd/MM/yyyy' }}</td>
+                      </tr>
+                    }
+                  </tbody>
+                </table>
+              </div>
+            }
+          </div>
+        </div>
+      </div>
+    </div>
+  }
+</section>

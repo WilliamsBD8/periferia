@@ -1,0 +1,68 @@
+
+<!-- Login -->
+<div class="card p-md-7 p-1">
+    <!-- Logo -->
+    <div class="app-brand justify-content-center mt-5">
+        <a href="/login" class="app-brand-link gap-2">
+            <span class="app-brand-text demo text-heading fw-semibold">{{ title() }} - Registro</span>
+        </a>
+    </div>
+    <!-- /Logo -->
+
+    <div class="card-body mt-1">
+    <p class="mb-5">Por favor, regístrese en nuestra plataforma y comience la aventura</p>
+
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        <div class="form-floating form-floating-outline mb-5">
+            <input
+                type="text"
+                class="form-control"
+                [class.is-invalid]="form.get('name')?.invalid && (form.get('name')?.touched || submitted)"
+                [autofocus]="true"
+                placeholder="Ingrese su nombre"
+                formControlName="name" />
+            <label for="name">Nombre</label>
+            <div class="invalid-feedback">
+                <span *ngIf="form.get('name')?.errors?.['required']">El nombre es requerido</span>
+                <span *ngIf="form.get('name')?.errors?.['minlength']">El nombre debe tener al menos 3 caracteres</span>
+            </div>
+        </div>
+        <div class="form-floating form-floating-outline mb-5">
+            <input
+                type="email"
+                class="form-control"
+                [class.is-invalid]="form.get('email')?.invalid && (form.get('email')?.touched || submitted)"
+                [autofocus]="true"
+                placeholder="Ingrese su correo electrónico"
+                formControlName="email" />
+            <label for="email">Correo electrónico</label>
+            <div class="invalid-feedback">
+                <span *ngIf="form.get('email')?.errors?.['required']">El correo electrónico es requerido</span>
+                <span *ngIf="form.get('email')?.errors?.['email']">El correo electrónico no es válido</span>
+            </div>
+        </div>
+        <div class="form-floating form-floating-outline mb-5">
+            <input
+                type="password"
+                class="form-control"
+                [class.is-invalid]="form.get('password')?.invalid && (form.get('password')?.touched || submitted)"
+                placeholder="&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;&#xb7;"
+                formControlName="password" />
+            <label for="password">Contraseña</label>
+            <div class="invalid-feedback">
+                <span *ngIf="form.get('password')?.errors?.['required']">La contraseña es requerida</span>
+                <span *ngIf="form.get('password')?.errors?.['minlength']">La contraseña debe tener al menos 6 caracteres</span>
+            </div>
+        </div>
+        <div class="mb-5">
+            <button class="btn btn-primary d-grid w-100" type="submit">Regístrate</button>
+        </div>
+    </form>
+
+    <p class="text-center">
+        <span>Ya tienes una cuenta?</span>
+        <a [routerLink]="['/login']">
+        <span>Inicia sesión</span>
+        </a>
+    </p>
+</div>

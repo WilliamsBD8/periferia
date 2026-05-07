@@ -1,0 +1,181 @@
+<div class="row g-6">
+
+    <div class="col-md-12 col-xxl-12 mb-1">
+        <div class="card">
+            <div class="card-body py-2 px-5 d-flex justify-content-between align-items-center">
+                <h4 class="card-title mb-0">
+                    Tablero de tareas
+                </h4>
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="">
+                        <button class="btn btn-primary waves-effect waves-light" type="button" data-bs-toggle="offcanvas" data-bs-target="#canvas-form" aria-controls="offcanvasEnd">
+                            Añadir Tarea
+                        </button>
+                        <div class="offcanvas offcanvas-end" tabindex="-1" id="canvas-form" aria-labelledby="canvas-form-label">
+                            <div class="offcanvas-header">
+                                <h5 id="canvas-form-label" class="offcanvas-title">{{ mode === 'create' ? 'Añadir tarea' : 'Editar tarea' }}</h5>
+                                <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+                            </div>
+                            <div class="offcanvas-body mx-0 flex-grow-0">
+                                <form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+                                    <div class="form-floating mb-2">
+                                        <input
+                                            type="text"
+                                            class="form-control required"
+                                            id="add-task-title"
+                                            placeholder=""
+                                            formControlName="title"
+                                            [class.is-invalid]="form.get('title')?.invalid && (form.get('title')?.touched || submitted)"
+                                        >
+                                        <label for="add-task-title">Titulo *</label>
+                                        <span class="form-floating-focused"></span>
+                                        <div class="invalid-feedback">
+                                            <span *ngIf="form.get('title')?.errors?.['required']">El titulo es requerido</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-floating form-floating-outline mb-2">
+                                        <textarea class="form-control h-px-100" id="add-task-description" placeholder="" formControlName="description"></textarea>
+                                        <label for="add-task-description">Descripción</label>
+                                    </div>
+
+                                    <div class="form-floating form-floating-outline mb-5">
+                                        <input type="date" class="form-control flatpickr-input required" placeholder="YYYY-MM-DD" id="add-task-date" formControlName="expirationDate">
+                                        <label for="add-task-date">Fecha *</label>
+                                    </div>
+
+                                    <div class="form-floating form-floating-outline mb-2">
+                                        <select
+                                            class="form-select form-select-lg"
+                                            id="add-task-user" formControlName="assignedToUserId">
+                                                <option
+                                                *ngFor="let user of users"
+                                                [value]="user.id"
+                                                >{{ user.name }}</option>
+                                        </select>
+                                        <label for="add-task-user">Usuario *</label>
+                                    </div>
+
+                                    <div class="form-floating form-floating-outline mb-2">
+                                        <select
+                                            class="form-select form-select-lg"
+                                            id="status-task" formControlName="status">
+                                            <option *ngFor="let status of states" [value]="status.id">{{ status.title }}</option>
+                                        </select>
+                                        <label for="status-task">Estado</label>
+                                    </div>
+
+                                    <button type="submit" class="btn btn-primary mb-2 d-grid w-100 waves-effect waves-light">
+                                        {{ mode === 'create' ? 'Crear' : 'Actualizar' }}
+                                    </button>
+                                    <button type="button" class="btn btn-outline-secondary d-grid w-100 waves-effect" data-bs-dismiss="offcanvas">
+                                        Cancelar
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="app-kanban">
+        <div class="kanban-wrapper">
+
+        </div>
+    </div>
+
+    <!-- Toggle Between Modals -->
+    <div class="col-lg-4 col-md-6">
+        <div class="mt-4">
+
+          <!-- Modal 1-->
+          <div
+            class="modal fade"
+            id="modalToggle"
+            aria-labelledby="modalToggleLabel"
+            tabindex="-1"
+            style="display: none"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title" id="modalToggleLabel">Editar tarea #{{ task?.id }}</h4>
+                  <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <ul>
+                        <li><b>Título:</b> {{ task?.title }}</li>
+                        <li><b>Descripción:</b> {{ task?.description }}</li>
+                        <li><b>Fecha de vencimiento:</b> {{ task?.expirationDate | date:'dd/MM/yyyy' }}</li>
+                        <li><b>Creado por:</b> {{ task?.user?.name }}</li>
+                        <li><b>Usuario asignado:</b> {{ task?.assignedToUser?.name }}</li>
+                        <li><b>Estado:</b> {{ task?.status | titlecase }}</li>
+                        <li><b>Creado el:</b> {{ task?.createdAt | date:'dd/MM/yyyy HH:mm' }}</li>
+                    </ul>
+                </div>
+                <div class="modal-footer">
+                    <button
+                        type="button"
+                        (click)="onEdit(task?.id)"
+                        class="btn btn-primary"
+                        data-bs-dismiss="modal">
+                        Editar
+                    </button>
+
+                    <button
+                        type="button"
+                        (click)="onDelete(task?.id)"
+                        class="btn btn-danger"
+                        data-bs-dismiss="modal">
+                        Eliminar
+                    </button>
+
+                    <button
+                        class="btn btn-secondary"
+                        data-bs-dismiss="modal">
+                        Cerrar
+                    </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Modal 2-->
+          <div
+            class="modal fade"
+            id="modalToggle2"
+            aria-hidden="true"
+            aria-labelledby="modalToggleLabel2"
+            tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h4 class="modal-title" id="modalToggleLabel2">Modal 2</h4>
+                  <button
+                    type="button"
+                    class="btn-close"
+                    data-bs-dismiss="modal"
+                    aria-label="Close"></button>
+                </div>
+                <div class="modal-body">Hide this modal and show the first with the button below.</div>
+                <div class="modal-footer">
+                  <button
+                    class="btn btn-primary"
+                    data-bs-target="#modalToggle"
+                    data-bs-toggle="modal"
+                    data-bs-dismiss="modal">
+                    Back to first
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+</div>
